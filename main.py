@@ -9,7 +9,7 @@ def main():
     geo_add, status = geocoding(path_add, col_add)
 
     analyse_geo_distance(geo_add, path_intersport)
-
+    test = 4 * 16
     path_com = r'C:\Users\jerem\PycharmProjects\pythonProject\analyse_geo_bon_chaussures\data\2021-topo-comOnly-4326.json'
 
 
