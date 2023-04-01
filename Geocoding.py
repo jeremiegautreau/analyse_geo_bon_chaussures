@@ -2,13 +2,12 @@ import requests
 import pandas as pd
 from io import StringIO
 
-
 DEFAULT_REQUEST = [
-        ('result_columns', (None, 'latitude')),
-        ('result_columns', (None, 'longitude')),
-        ('result_columns', (None, 'result_city')),
-        ('result_columns', (None, 'result_citycode')),
-    ]
+    ('result_columns', (None, 'latitude')),
+    ('result_columns', (None, 'longitude')),
+    ('result_columns', (None, 'result_city')),
+    ('result_columns', (None, 'result_citycode')),
+]
 
 
 def format_geocoded_data(geocoded_data):
@@ -19,9 +18,9 @@ def format_geocoded_data(geocoded_data):
 
 
 def geocoding(path_add, col_add, files=DEFAULT_REQUEST):
-    files = [ ('data', open(path_add, 'rb')),
-        ('columns', (None, col_add))
-    ] + files
+    files = [('data', open(path_add, 'rb')),
+             ('columns', (None, col_add))
+             ] + files
     url = 'https://api-adresse.data.gouv.fr/search/csv/'
     response = requests.post(url, files=files)
 
@@ -29,10 +28,10 @@ def geocoding(path_add, col_add, files=DEFAULT_REQUEST):
         status = 'Request successful'
         geocoded = response.content
         df = format_geocoded_data(geocoded)
-        return df, print(status)
+        return df, status
     else:
-        status = 'Error during request to API: '+str(response.status_code)
-        return print(status)
+        status = 'Error during request to API: ' + str(response.status_code)
+        return None, status
 
 
 if __name__ == '__main__':
