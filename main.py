@@ -1,16 +1,25 @@
-# This is a sample Python script.
-
-# Press Maj+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from Geocoding import geocoding
+from Analyse_geo_distance import analyse_geo_distance
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def main():
+
+    path_add = 'C://Users//jerem//PycharmProjects//pythonProject//' \
+            'analyse_geo_bon_chaussures//data//analyse_geo_add.csv'
+    col_add = 'Adresse clean'
+
+    geocoding(path_add, col_add)
+
+    geo_add = df
+
+    path_intersport = r'C:\Users\jerem\PycharmProjects\pythonProject\analyse_geo_bon_chaussures\data\analyse_geo_intersport.csv'
+
+    analyse_geo_distance(geo_add, path_intersport)
+
+    path_com = r'C:\Users\jerem\PycharmProjects\pythonProject\analyse_geo_bon_chaussures\data\2021-topo-comOnly-4326.json'
 
 
-# Press the green button in the gutter to run the script.
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
