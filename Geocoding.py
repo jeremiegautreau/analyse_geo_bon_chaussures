@@ -19,10 +19,9 @@ def format_geocoded_data(geocoded_data):
 
 
 def geocoding(path_add, col_add, files=DEFAULT_REQUEST):
-    files.append(
-        ('data', open(path_add, 'rb')),
+    files = [ ('data', open(path_add, 'rb')),
         ('columns', (None, col_add))
-    )
+    ] + files
     url = 'https://api-adresse.data.gouv.fr/search/csv/'
     response = requests.post(url, files=files)
 
