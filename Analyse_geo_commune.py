@@ -4,7 +4,7 @@ import plotly.express as px
 from shapely.validation import make_valid
 
 
-def analyse_geo_com(geo_add, path_com):
+def group_com(geo_add, path_com):
 
     gdf_ratio = pd.pivot_table(geo_add, values=['Utilise'],
                                index=['result_city', 'result_citycode'],
@@ -20,8 +20,6 @@ def analyse_geo_com(geo_add, path_com):
 
     gdf_com = gpd.read_file(path_com)
 
-    # gdf_com.head()
-
     gdf_ratio_com = pd.merge(gdf_ratio,
                              gdf_com[['codgeo', 'geometry']],
                              left_on='result_citycode',
@@ -29,30 +27,30 @@ def analyse_geo_com(geo_add, path_com):
                              how='left'
                              )
 
-
     gdf_ratio_com = gpd.GeoDataFrame(gdf_ratio_com, crs="EPSG:4326")
 
-    # gdf_ratio_com = gdf_ratio_com.set_crs(epsg=3857,
-    #                                     allow_override=True,
-    #                                     inplace=True
-    #                                     )
-
-    # gdf_ratio_com.to_crs(epsg=3857, inplace=True)
-
-    gdf_ratio_com = gdf_ratio_com.iloc[:, [4, 0, 1, 2, 3]]  # nécessaire?
-
-
     gdf_ratio_com = gpd.GeoDataFrame(gdf_ratio_com)
-    gdf_ratio_com['validite'] = gdf_ratio_com.geometry.is_valid
-    gdf_ratio_com.geometry.dropna(inplace=True)
-    gdf_ratio_com = gdf_ratio_com.drop(index='Paris')
-    gdf_ratio_com.geometry = gdf_ratio_com.apply(lambda row: make_valid(row.geometry) if not row.geometry.is_valid else row.geometry, axis=1)
 
-    gdf_ratio_com = gdf_ratio_com.set_index("result_city")
+    return gdf_ratio_com
 
-    fig = px.choropleth_mapbox(data_frame=gdf_ratio_com,
-                               geojson=gdf_ratio_com.geometry,
-                               locations=gdf_ratio_com.index,
+
+def repair_clean_gdf(gdf):
+
+    gdf['validite'] = gdf.geometry.is_valid
+    gdf.geometry.dropna(inplace=True)
+    gdf = gdf.drop(index='Paris')
+    gdf.geometry = gdf.apply(lambda row: make_valid(row.geometry) if not row.geometry.is_valid else row.geometry, axis=1)
+
+    return gdf
+
+
+def choropleth_map(gdf):
+
+    gdf = gdf.set_index("result_city")
+
+    fig = px.choropleth_mapbox(data_frame=gdf,
+                               geojson=gdf.geometry,
+                               locations=gdf.index,
                                color="ratio",
                                center={"lat": 47.7493897, "lon": -3.3977793},
                                mapbox_style='open-street-map',
@@ -63,7 +61,7 @@ def analyse_geo_com(geo_add, path_com):
                                opacity=0.75,
                                zoom=7,
                                hover_data=['Nombre'],
-                               hover_name=gdf_ratio_com.index)
+                               hover_name=gdf.index)
 
     fig.update_traces(marker_line_width=1, marker_opacity=0.8, marker_line=dict(color="White"))
     fig.update_geos(fitbounds='locations',
@@ -72,3 +70,16 @@ def analyse_geo_com(geo_add, path_com):
     fig.show()
 
     fig.write_html("Bon_ratio_com.html")
+
+
+def analyse_geo_com(geo_add, path_com):
+
+    gdf_ratio_com = group_com(geo_add, path_com)
+
+    gdf_ratio_com = repair_clean_gdf(gdf_ratio_com)
+
+    choropleth_map(gdf_ratio_com)
+
+
+if __name__ == '__main__':
+    pass
