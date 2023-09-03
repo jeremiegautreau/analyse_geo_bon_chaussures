@@ -11,6 +11,8 @@ We let the liberty for health staff to add money to buy a pair of shoes with sup
 We constated at the end of the year 2022 that one third of health staff did not used their voucher.
 We tried to understand the reasons and decided to analyse if the distance between the home adress of health staff and the sport shop had an impact of the voucher use.
 
+The principal libraries used are geopandas and plotly. 
+
 The first step was to get gps location and city code from health staff's home adress and the shop sport. 
 The API from the BAN (Base d'adresse nationale) was used to retrieved all gps location and city code. 
 Geocoding.py file shows the function to make the request to the API. 
@@ -25,6 +27,12 @@ The choropleth map is then plotted with the color scale of the use ration.
 ![My Image](choropleth_com.png)
 
 The second map shows the use ratio of the voucher base on the distance from the sport shop.
+
+A new layer is created based on the sport shop location. Four circular area are drawn to modelize the distance from the sport shop.
+The shape of the coast was remove with a geo join between the circular layer and France layer using the predicat intersects.
+![My Image](circular_aera.png)
+
+
 
 
 
