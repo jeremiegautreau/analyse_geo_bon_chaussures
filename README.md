@@ -29,9 +29,14 @@ The choropleth map is then plotted with the color scale of the use ration.
 The second map shows the use ratio of the voucher base on the distance from the sport shop.
 
 A new layer is created based on the sport shop location. Four circular area are drawn to modelize the distance from the sport shop.
-The shape of the coast was remove with a geo join between the circular layer and France layer using the predicat intersects.
+The shape of the coast was remove with a overlay function between the circular layer and France layer.
 ![My Image](circular_aera.png)
 
+A geo join is made between all home staff locations and the new layer.
+a group by is used to make the use ratio for each circular area.
+
+The map is then plotted with plotly.
+![My Image](choropleth_distance.png)
 
 
 
