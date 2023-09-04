@@ -26,7 +26,7 @@ def create_gdf(geo_add, path_intersport):
     gdf_f = gpd.read_file('fr-poly.json')
     gdf_f.to_crs(epsg=2154, inplace=True)
 
-    return geo_intersport, gdf_f
+    return geo_intersport, gdf
 
 
 def create_layer(geo_intersport, gdf_f):
@@ -112,9 +112,12 @@ def choropleth_map(gdf_dist, geo_intersport):
 
     fig.write_html("Bon_ratio_distance.html")
 
-def analyse_geo_distance(geo_add, path_intersport):
+def analyse_geo_distance(geo_add, path_intersport, path_France):
 
-    geo_intersport, gdf_f = create_gdf(geo_add, path_intersport)
+    gdf_f = gpd.read_file(path_France)
+    gdf_f.to_crs(epsg=2154, inplace=True)
+
+    geo_intersport, gdf = create_gdf(geo_add, path_intersport)
 
     gdf_distance = create_layer(geo_intersport, gdf_f)
 
