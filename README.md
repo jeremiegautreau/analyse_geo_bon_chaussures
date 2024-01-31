@@ -41,7 +41,7 @@ Finally, the map is plotted with plotly.
 
 
 We concluded that the geographical factor had a moderate impact on the voucher's use.
-Futher investigations demonstrate that a better communication toward health staff with regulars reminders to use the voucher was the key to resolve the problem.
+Further investigations demonstrated that a better communication toward health staff with regulars reminders to use the voucher was the key to resolve the problem.
 The project was a good practice to use Geopandas and Plotly with GIS data.
 
 
