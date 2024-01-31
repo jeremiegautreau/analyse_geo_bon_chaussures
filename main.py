@@ -1,24 +1,20 @@
 from Geocoding import geocoding
 from Analyse_geo_distance import analyse_geo_distance
-
+from Analyse_geo_commune import analyse_geo_com
+import os
 
 def main():
-
-    path_add = 'C://Users//jerem//PycharmProjects//pythonProject//' \
-            'analyse_geo_bon_chaussures//data//analyse_geo_add.csv'
+    path_add = os.getenv('DATA_PATH')
+    path_intersport = os.getenv('INTERSPORT_PATH')
+    path_com = os.getenv('PATH_COM')
+    path_France = os.getenv('PATH_FRANCE')
     col_add = 'Adresse clean'
-
-    geocoding(path_add, col_add)
-
-    geo_add = df
-
-    path_intersport = r'C:\Users\jerem\PycharmProjects\pythonProject\analyse_geo_bon_chaussures\data\analyse_geo_intersport.csv'
-
-    analyse_geo_distance(geo_add, path_intersport)
-
-    path_com = r'C:\Users\jerem\PycharmProjects\pythonProject\analyse_geo_bon_chaussures\data\2021-topo-comOnly-4326.json'
+    geo_add, status = geocoding(path_add, col_add)
 
 
+    analyse_geo_distance(geo_add, path_intersport, path_France)
+
+    analyse_geo_com(geo_add, path_com)
 
 
 if __name__ == '__main__':

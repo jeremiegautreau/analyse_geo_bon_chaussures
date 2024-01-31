@@ -8,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-def analyse_geo_distance(geo_add, path_intersport):
+def create_gdf(geo_add, path_intersport):
 
     gdf = gpd.GeoDataFrame(geo_add,
                            geometry=gpd.points_from_xy(geo_add.longitude, geo_add.latitude),
@@ -26,6 +26,11 @@ def analyse_geo_distance(geo_add, path_intersport):
     gdf_f = gpd.read_file('fr-poly.json')
     gdf_f.to_crs(epsg=2154, inplace=True)
 
+    return geo_intersport, gdf
+
+
+def create_layer(geo_intersport, gdf_f):
+
     distance = [75000, 50000, 30000, 15000]
     nom = ['Intersport_75km', 'Intersport_50km', 'Intersport_30km', 'Intersport_15km']
 
@@ -40,6 +45,11 @@ def analyse_geo_distance(geo_add, path_intersport):
         else:
             gdf_distance.iloc[-1:] = gdf_distance.iloc[-1:].overlay(df_d, how='difference')
             gdf_distance = gpd.GeoDataFrame(pd.concat([gdf_distance, df_d], ignore_index=True))
+
+    return gdf_distance
+
+
+def gdf_join_groupby(gdf_distance, gdf):
 
     gdf_distance = gdf_distance.sjoin(gdf[['Utilise', 'geometry']],
                                       how='left',
@@ -56,6 +66,11 @@ def analyse_geo_distance(geo_add, path_intersport):
                                         })
 
     gdf_dist.reset_index()
+
+    return gdf_dist
+
+
+def choropleth_map(gdf_dist, geo_intersport):
 
     gdf_dist.to_crs(epsg=4326, inplace=True)
     geo_intersport.to_crs(epsg=4326, inplace=True)
@@ -96,3 +111,20 @@ def analyse_geo_distance(geo_add, path_intersport):
     fig.show()
 
     fig.write_html("Bon_ratio_distance.html")
+
+def analyse_geo_distance(geo_add, path_intersport, path_France):
+
+    gdf_f = gpd.read_file(path_France)
+    gdf_f.to_crs(epsg=2154, inplace=True)
+
+    geo_intersport, gdf = create_gdf(geo_add, path_intersport)
+
+    gdf_distance = create_layer(geo_intersport, gdf_f)
+
+    gdf_dist = gdf_join_groupby(gdf_distance, gdf)
+
+    choropleth_map(gdf_dist, geo_intersport)
+
+
+if __name__ == '__main__':
+    pass
